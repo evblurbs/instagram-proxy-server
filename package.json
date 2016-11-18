@@ -1,0 +1,23 @@
+{
+  "name": "instagram-proxy-server",
+  "version": "1.0.0",
+  "description": "A proxy server that allows you to consume Instagram's API.",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/evblurbs/instagram-proxy-server.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evblurbs/instagram-proxy-server/issues"
+  },
+  "homepage": "https://github.com/evblurbs/instagram-proxy-server#readme",
+  "dependencies": {
+    "ejs": "^2.5.2",
+    "express": "^4.14.0"
+  }
+}
