@@ -14,12 +14,8 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/', function(request, response) {
-  response.render('pages/index');
-});
-
-app.get('/test', function(req, res) {
-
+app.get('/', function(req, res) {
+  console.log(req.query.searchTerm);
   var config = {
       "consumerKey": "ymDH2WFcPmX5X9uiMaLn7CQwf",
       "consumerSecret": "zxH2EKu30j2kgrdxy7lDtzYegg1DlnVGAyd2uT8FEmvONu8x7W",
@@ -29,12 +25,29 @@ app.get('/test', function(req, res) {
   };
 
   var twitter = new Twitter(config);
-  twitter.getSearch({'q':'puppy filter:images','count': 10}, function(err, response, body) {
+  twitter.getSearch({'q': req.query.searchTerm + ' filter:twimg','count': 100}, function(err, response, body) {
     console.log('ERROR [%s]', err);
     res.json({ error: err });
   }, function(data) {
-    console.log('Data [%s]', data);
-    res.json({ message: JSON.parse(data) });
+    var data = JSON.parse(data);
+    var returnArray = [];
+    if (data && data.statuses && data.statuses.length) {
+      data.statuses.forEach(function(msg, index, array) {
+        if(msg.retweeted_status) {
+          return;
+        }
+        if(!msg.entities || !msg.entities.media || !msg.entities.media[0].media_url) {
+          return;
+        }
+        var msgObj = {};
+        msgObj.image = msg.entities.media[0].media_url;
+        msgObj.username = msg.user.screen_name;
+        msgObj.text = msg.text;
+        msgObj.tweet_url = 'https://twitter.com/statuses/' + msg.id_str;
+        returnArray.push(msgObj);
+      });
+      res.json({ returnArray });
+    }
   });
 });
 
