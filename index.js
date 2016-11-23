@@ -46,7 +46,7 @@ app.get('/', function(req, res) {
         msgObj.tweet_url = 'https://twitter.com/statuses/' + msg.id_str;
         returnArray.push(msgObj);
       });
-      res.json({ returnArray });
+      res.jsonp({ data: returnArray });
     }
   });
 });
